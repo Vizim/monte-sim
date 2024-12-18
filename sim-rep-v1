@@ -1,7 +1,7 @@
+
 import numpy as np
 import pandas as pd
 import streamlit as st
-import plotly.express as px
 
 # Streamlit Inputs for Parameters
 st.title("Monte Carlo Simulation for Total Cost Estimation")
@@ -76,27 +76,14 @@ st.markdown(f"""
     </div>
 """, unsafe_allow_html=True)
 
-# Visualization: Distribution of Total Costs using Plotly
+# Visualization: Histogram of Total Costs
 st.subheader("Distribution of Total Costs")
-fig = px.histogram(results, x="Total Cost", nbins=50, title="Distribution of Total Costs (Monte Carlo Simulation)", 
-                   labels={"Total Cost": "Total Cost ($)"}, 
-                   color_discrete_sequence=["skyblue"])
-fig.update_layout(
-    xaxis_title="Total Cost ($)",
-    yaxis_title="Frequency",
-    template="plotly_white"
-)
-st.plotly_chart(fig)
+fig, ax = plt.subplots(figsize=(10, 6))
+ax.hist(results["Total Cost"], bins=50, color='skyblue', alpha=0.7)
+ax.set_title("Distribution of Total Costs (Monte Carlo Simulation)", fontsize=14)
+ax.set_xlabel("Total Cost ($)", fontsize=12)
+ax.set_ylabel("Frequency", fontsize=12)
+ax.grid(True)
+st.pyplot(fig)
 
-# Visualization: Total Cost vs Number of Applications using Plotly
-st.subheader("Total Cost vs Number of Applications")
-fig2 = px.scatter(results, x="Number of Applications", y="Total Cost", 
-                  title="Total Cost vs Number of Applications", 
-                  labels={"Number of Applications": "Number of Applications", "Total Cost": "Total Cost ($)"},
-                  color_discrete_sequence=["orange"])
-fig2.update_layout(
-    xaxis_title="Number of Applications",
-    yaxis_title="Total Cost ($)",
-    template="plotly_white"
-)
-st.plotly_chart(fig2)
+st.header("Total Cost {total_cost}")
