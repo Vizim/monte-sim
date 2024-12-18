@@ -2,7 +2,7 @@ import numpy as np
 import pandas as pd
 import streamlit as st
 import matplotlib.pyplot as plt
-
+np.random.seed(1)
 # Streamlit Inputs for Parameters
 st.title("Monte Carlo Simulation for Total Cost Estimation")
 
