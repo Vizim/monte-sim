@@ -1,6 +1,7 @@
 import numpy as np
 import pandas as pd
 import streamlit as st
+import matplotlib.pyplot as plt
 
 # Streamlit Inputs for Parameters
 st.title("Monte Carlo Simulation for Total Cost Estimation")
@@ -38,7 +39,7 @@ total_hours = (endpoint_hours + api_hours) * productivity_coefficient
 # Convert hardware cost to equivalent hours
 hardware_hours = fixed_hardware_cost 
 
-# Total cost (in dollars)
+# Total cost (in dollars) without max value constraint
 total_cost = (total_hours + hardware_hours) * cost_per_hour
 
 # Store results in a DataFrame
@@ -75,17 +76,17 @@ st.markdown(f"""
     </div>
 """, unsafe_allow_html=True)
 
-# Visualization: Bar Chart of Total Costs
+# Visualization: Histogram of Total Costs using Matplotlib, and display it with Streamlit's st.pyplot
 st.subheader("Distribution of Total Costs")
-cost_histogram = pd.Series(total_cost).value_counts().sort_index()
+fig, ax = plt.subplots(figsize=(10, 6))
+ax.hist(results["Total Cost"], bins=50, color='skyblue', alpha=0.7)
+ax.set_title("Distribution of Total Costs (Monte Carlo Simulation)", fontsize=14)
+ax.set_xlabel("Total Cost ($)", fontsize=12)
+ax.set_ylabel("Frequency", fontsize=12)
+ax.grid(True)
 
-# Plot the bar chart
-st.bar_chart(cost_histogram)
+# Display the plot using st.pyplot
+st.pyplot(fig)
 
-# Visualization: Total Cost vs Number of Applications (Bar Chart)
-st.subheader("Total Cost vs Number of Applications")
-cost_vs_apps = pd.DataFrame({
-    "Number of Applications": results["Number of Applications"],
-    "Total Cost": results["Total Cost"]
-})
-st.bar_chart(cost_vs_apps.set_index("Number of Applications"))
+# Display the average cost in header
+st.header(f"Estimated Total Cost: ${average_cost:,.2f}")
