@@ -1,7 +1,6 @@
 import numpy as np
 import pandas as pd
 import streamlit as st
-import plotly.graph_objects as go
 
 # Streamlit Inputs for Parameters
 st.title("Monte Carlo Simulation for Total Cost Estimation")
@@ -76,43 +75,17 @@ st.markdown(f"""
     </div>
 """, unsafe_allow_html=True)
 
-# Visualization: Distribution of Total Costs using Plotly Graph Objects
+# Visualization: Bar Chart of Total Costs
 st.subheader("Distribution of Total Costs")
-histogram = go.Figure()
+cost_histogram = pd.Series(total_cost).value_counts().sort_index()
 
-histogram.add_trace(go.Histogram(
-    x=results["Total Cost"],
-    nbinsx=50,
-    name="Total Cost",
-    marker_color="skyblue"
-))
+# Plot the bar chart
+st.bar_chart(cost_histogram)
 
-histogram.update_layout(
-    title="Distribution of Total Costs (Monte Carlo Simulation)",
-    xaxis_title="Total Cost ($)",
-    yaxis_title="Frequency",
-    template="plotly_white"
-)
-
-st.plotly_chart(histogram)
-
-# Visualization: Total Cost vs Number of Applications using Plotly Graph Objects
+# Visualization: Total Cost vs Number of Applications (Bar Chart)
 st.subheader("Total Cost vs Number of Applications")
-scatter_plot = go.Figure()
-
-scatter_plot.add_trace(go.Scatter(
-    x=results["Number of Applications"],
-    y=results["Total Cost"],
-    mode="markers",
-    name="Data points",
-    marker=dict(color="orange", opacity=0.5)
-))
-
-scatter_plot.update_layout(
-    title="Total Cost vs Number of Applications",
-    xaxis_title="Number of Applications",
-    yaxis_title="Total Cost ($)",
-    template="plotly_white"
-)
-
-st.plotly_chart(scatter_plot)
+cost_vs_apps = pd.DataFrame({
+    "Number of Applications": results["Number of Applications"],
+    "Total Cost": results["Total Cost"]
+})
+st.bar_chart(cost_vs_apps.set_index("Number of Applications"))
