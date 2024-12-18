@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 import streamlit as st
-import plotly.express as px
+import plotly.graph_objects as go
 
 # Streamlit Inputs for Parameters
 st.title("Monte Carlo Simulation for Total Cost Estimation")
@@ -76,27 +76,43 @@ st.markdown(f"""
     </div>
 """, unsafe_allow_html=True)
 
-# Visualization: Distribution of Total Costs using Plotly
+# Visualization: Distribution of Total Costs using Plotly Graph Objects
 st.subheader("Distribution of Total Costs")
-fig = px.histogram(results, x="Total Cost", nbins=50, title="Distribution of Total Costs (Monte Carlo Simulation)", 
-                   labels={"Total Cost": "Total Cost ($)"}, 
-                   color_discrete_sequence=["skyblue"])
-fig.update_layout(
+histogram = go.Figure()
+
+histogram.add_trace(go.Histogram(
+    x=results["Total Cost"],
+    nbinsx=50,
+    name="Total Cost",
+    marker_color="skyblue"
+))
+
+histogram.update_layout(
+    title="Distribution of Total Costs (Monte Carlo Simulation)",
     xaxis_title="Total Cost ($)",
     yaxis_title="Frequency",
     template="plotly_white"
 )
-st.plotly_chart(fig)
 
-# Visualization: Total Cost vs Number of Applications using Plotly
+st.plotly_chart(histogram)
+
+# Visualization: Total Cost vs Number of Applications using Plotly Graph Objects
 st.subheader("Total Cost vs Number of Applications")
-fig2 = px.scatter(results, x="Number of Applications", y="Total Cost", 
-                  title="Total Cost vs Number of Applications", 
-                  labels={"Number of Applications": "Number of Applications", "Total Cost": "Total Cost ($)"},
-                  color_discrete_sequence=["orange"])
-fig2.update_layout(
+scatter_plot = go.Figure()
+
+scatter_plot.add_trace(go.Scatter(
+    x=results["Number of Applications"],
+    y=results["Total Cost"],
+    mode="markers",
+    name="Data points",
+    marker=dict(color="orange", opacity=0.5)
+))
+
+scatter_plot.update_layout(
+    title="Total Cost vs Number of Applications",
     xaxis_title="Number of Applications",
     yaxis_title="Total Cost ($)",
     template="plotly_white"
 )
-st.plotly_chart(fig2)
+
+st.plotly_chart(scatter_plot)
